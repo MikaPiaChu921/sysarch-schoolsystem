@@ -1,0 +1,153 @@
+<body ng-app="myapp">
+  <!-- ubos header-->
+  <div class="w3-row w3-gray" style="height: 50px; width: 100%">
+    <div class="w3-quarter" style="height: 100%">
+      <button
+        id="openNav"
+        onclick="w3_open()"
+        style="height: 100%; width: 25%; background: white"
+      >
+        &#9776;
+      </button>
+    </div>
+    <div class="w3-half" style="height: 100%">
+      <h5>ENROLLMENT</h5>
+    </div>
+    <div class="w3-quarter" style="height: 100%">
+      <button
+        style="height: 100%; width: 20%; border: none; background: transparent"
+        class="w3-right w3-margin-right"
+        ng-click="logout()"
+      >
+        <i style="font-size: 25px" class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </div>
+
+  <!--  hamburgrer-->
+  <div
+    id="mySidebar"
+    style="display: none; background-color: black; color: white"
+    class="w3-sidebar w3-bar-block w3-card w3-animate-left"
+  >
+    <button class="w3-bar-item w3-button w3-large" onclick="w3_close()">
+      close &times;
+    </button>
+    <a href="/#!/student" class="w3-bar-item w3-button">STUDENT</a>
+    <a href="/#!/subject" class="w3-bar-item w3-button">SUBJECT</a>
+    <a href="/#!/enrollment" class="w3-bar-item w3-button">ENROLLMENT</a>
+    <a href="/#!/report" class="w3-bar-item w3-button">REPORT</a>
+  </div>
+  <br />
+  <div id="main" style="width: 100%; height: 100%">
+    <div class="w3-row" style="width: 100%">
+      <div class="w3-card-2 w3-round-xlarge w3-padding">
+        <form style="padding: 10px; width: 100%">
+          <div>
+            <label>ID no.</label>
+            <input
+              type="number"
+              id="idno"
+              ng-model="idno"
+              style="width: 25%; border: none; border-bottom: 2px solid black"
+            />
+
+            <button>GO</button>
+          </div>
+          <br />
+          <br />
+          <div class="w3-row">
+            <div
+              class="w3-card w3-padding w3-half"
+              style="border: 2px SOLID GRAY; width: 50%; color: gray"
+            >
+              <h5>DURANO, DENNIS &nbsp; &nbsp; BSCPE &nbsp; &nbsp; 1</h5>
+            </div>
+            <div class="w3-half">
+              <button
+                class="w3-round-xxlarge w3-padding w3-red"
+                style="width: 30%"
+              >
+                DELETE
+              </button>
+            </div>
+          </div>
+          <br />
+          <br />
+          <div>
+            <label>edp code</label>
+            <input
+              type="number"
+              id="edpcode"
+              ng-model="edpcode"
+              style="
+                width: 20%;
+                border: none;
+                border-bottom: 2px solid black;
+                margin-right: 5px;
+              "
+            />
+            <button>SEARCH</button>
+          </div>
+          <br />
+          <div>
+            <table class="w3-table-all">
+              <tr>
+                <th>EDP CODE</th>
+                <th>SUBJECT CODE</th>
+                <th>TIME</th>
+                <th>DAY</th>
+                <th>ROOM</th>
+                <th>DELETE</th>
+              </tr>
+              <tr>
+                <td>0435</td>
+                <td>SYSARCH</td>
+                <td>5:30 - 6:30</td>
+                <td>MW</td>
+                <td>530B</td>
+                <td>
+                  <div class="w3-threequarter">
+                    <label></label>
+                    <input
+                      type="checkbox"
+                      id="delete"
+                      ng-model="delete"
+                      style="height: 20px; width: 50px"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>0421</td>
+                <td>COMP 100</td>
+                <td>12:30 - 1:30</td>
+                <td>MW</td>
+                <td>535B</td>
+                <td>
+                  <div class="w3-threequarter">
+                    <label></label>
+                    <input
+                      type="checkbox"
+                      id="delete"
+                      ng-model="delete"
+                      style="height: 20px; width: 50px"
+                    />
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <br />
+          <br />
+          <div class="w3-row">
+            <div class="w3-rest w3-container"></div>
+            <div class="w3-col w3-right w3-container" style="width: 100px">
+              <button class="w3-blue w3-padding w3-margin-right">SAVE</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>

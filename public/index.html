@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie-edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/w3.css" />
+    <script
+      src="https://kit.fontawes	ome.com/08e4802095.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/angular-route.min.js"></script>
+    <script src="assets/js/w3-helper.js"></script>
+  </head>
+  <body
+    ng-app="myapp"
+    style="
+      font-family: 'Poppins', sans-serif;
+      background-image: url(assets/img/bg.png);
+    "
+  >
+    <header>
+      <div class="w3-blue">
+        <h2 class="w3-padding">School System v1.0</h2>
+      </div>
+    </header>
+    <div ng-view class="w3-mobile">
+      <!-- contents will be inside here -->
+    </div>
+    <script src="/assets/js/myapp.js"></script>
+  </body>
+</html>

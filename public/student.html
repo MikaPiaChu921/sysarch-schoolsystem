@@ -1,0 +1,183 @@
+<body ng-app="myapp">
+  <!-- ubos header-->
+  <div class="w3-row w3-gray" style="height: 50px; width: 100%">
+    <div class="w3-quarter" style="height: 100%">
+      <button
+        id="openNav"
+        onclick="w3_open()"
+        style="height: 100%; width: 30%; background: white"
+      >
+        &#9776;
+      </button>
+    </div>
+    <div class="w3-half" style="height: 100%">
+      <h5>STUDENT</h5>
+    </div>
+    <div class="w3-quarter" style="height: 100%">
+      <button
+        style="height: 100%; width: 20%; border: none; background: transparent"
+        class="w3-right w3-margin-right"
+        ng-click="logout()"
+      >
+        <i style="font-size: 25px" class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </div>
+
+  <!--  hamburgrer-->
+  <div
+    id="mySidebar"
+    style="display: none; background-color: black; color: white"
+    class="w3-sidebar w3-bar-block w3-card w3-animate-left"
+  >
+    <button class="w3-bar-item w3-button w3-large" onclick="w3_close()">
+      close &times;
+    </button>
+    <a href="/#!/student" class="w3-bar-item w3-button">STUDENT</a>
+    <a href="/#!/subject" class="w3-bar-item w3-button">SUBJECT</a>
+    <a href="/#!/enrollment" class="w3-bar-item w3-button">ENROLLMENT</a>
+    <a href="/#!/report" class="w3-bar-item w3-button">REPORT</a>
+  </div>
+  <br />
+  <div id="main" style="width: 100%; height: 100%">
+    <div class="w3-row" style="width: 100%">
+      <div class="w3-third w3-card-2 w3-round-xlarge w3-padding">
+        <form style="padding: 10px; width: 100%">
+          <div>
+            <label>ID no.</label><br />
+            <input
+              type="number"
+              id="idno"
+              ng-model="idno"
+              style="
+                text-align: center;
+                width: 100%;
+                border: none;
+                border-bottom: 2px solid black;
+              "
+            />
+          </div>
+          <br />
+          <div>
+            <label>lastname</label><br />
+            <input
+              type="text"
+              id="lastname"
+              ng-model="lastname"
+              style="
+                text-align: center;
+                width: 100%;
+                border: none;
+                border-bottom: 2px solid black;
+              "
+            />
+          </div>
+          <br />
+          <div>
+            <label>firstname</label> <br />
+            <input
+              type="text"
+              id="firstname"
+              ng-model="firstname"
+              style="
+                text-align: center;
+                width: 100%;
+                border: none;
+                border-bottom: 2px solid black;
+                margin-right: 5px;
+              "
+            />
+          </div>
+          <br />
+          <div>
+            <label>course</label><br />
+            <select
+              name="course"
+              id="course"
+              ng-model="course"
+              style="
+                text-align: center;
+                width: 100%;
+                border: none;
+                border-bottom: 2px solid black;
+              "
+            >
+              <option value="bsit">BSIT</option>
+              <option value="bscs">BSCS</option>
+              <option value="act">ACT</option>
+            </select>
+          </div>
+          <br />
+          <div>
+            <label>level</label><br />
+            <select
+              name="level"
+              id="level"
+              ng-model="level"
+              style="
+                text-align: center;
+                width: 100%;
+                border: none;
+                border-bottom: 2px solid black;
+              "
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+          <br />
+          <div>
+            <button class="w3-blue w3-padding w3-margin-right">SAVE</button>
+            <button class="w3-blue w3-padding">CANCEL</button>
+          </div>
+        </form>
+      </div>
+      <div
+        class="w3-twothird w3-card-2 w3-round-xlarge w3-padding w3-border-black"
+      >
+        <br />
+        <div class="w3-row">
+          <div class="w3-quarter">
+            <select ng-model="pageSize">
+              <option ng-repeat="size in pagesizes" value="{{ size }}">
+                {{ size }}
+              </option>
+            </select>
+          </div>
+          <div class="w3-right w3-half" style="height: 100%">
+            <label for="searchInput"></label>
+            <input
+              placeholder="🔎 search..."
+              type="text"
+              id="searchInput"
+              ng-model="search.query"
+              style="border-radius: 10px; padding: 3px; font-size: 12px"
+            />
+          </div>
+        </div>
+        <br />
+        <div>
+          <table class="w3-table-all">
+            <tr>
+              <th>ID no.</th>
+              <th>name</th>
+              <th>course & level</th>
+              <th>action</th>
+            </tr>
+            <tr>
+              <td>0001</td>
+              <td>DURANO, DENNIS</td>
+              <td>BSCPE-2</td>
+              <td>
+                <button>edit</button>
+                <button>delete</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

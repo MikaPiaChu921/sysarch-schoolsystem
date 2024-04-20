@@ -1,0 +1,40 @@
+<body ng-app="myapp">
+  <div class="w3-half w3-container w3-padding">
+    <div class="w3-half w3-container w3-padding">
+      <div
+        style="width: 400px"
+        class="w3-card-4 w3-container w3-padding w3-display-middle"
+      >
+        <form class="modern-login-form">
+          <header class="w3-blue">
+            <h2 class="w3-padding">User Login</h2>
+          </header>
+          <div ng-show="loginError" style="color: red; text-align: center">
+            Invalid Username or Password
+          </div>
+          <br />
+          <br />
+          <div class="input-group">
+            <input
+              type="text"
+              id="email"
+              placeholder="user@gmail.com"
+              ng-model="email"
+            />
+          </div>
+          <div class="input-group">
+            <input
+              type="password"
+              id="password"
+              placeholder="********"
+              ng-model="password"
+            />
+          </div>
+          <div class="button-group">
+            <button ng-click="login()" class="btn-login">LOGIN</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
