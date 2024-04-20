@@ -2,6 +2,18 @@ const express = require("express");
 const CookieParser = require("cookie-parser");
 const path = require("path");
 const app = express();
+const mysql = require("mysql");
+
+const config = {
+  host: "127.0.0.1",
+  user: "root",
+  password: "",
+  database: "student_database",
+  charset: "utf8mb4",
+  multipleStatement: true,
+};
+
+const databaseConnection = mysql.createConnection(config);
 
 const users = [{ email: "admin@gmail.com", password: "admin" }];
 
