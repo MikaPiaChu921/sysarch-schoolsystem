@@ -48,7 +48,7 @@
             <input
               type="number"
               id="idno"
-              ng-model="idno"
+              ng-model="newStudent.idno"
               style="
                 text-align: center;
                 width: 100%;
@@ -63,7 +63,7 @@
             <input
               type="text"
               id="lastname"
-              ng-model="lastname"
+              ng-model="newStudent.lastname"
               style="
                 text-align: center;
                 width: 100%;
@@ -78,7 +78,7 @@
             <input
               type="text"
               id="firstname"
-              ng-model="firstname"
+              ng-model="newStudent.firstname"
               style="
                 text-align: center;
                 width: 100%;
@@ -94,7 +94,7 @@
             <select
               name="course"
               id="course"
-              ng-model="course"
+              ng-model="newStudent.course"
               style="
                 text-align: center;
                 width: 100%;
@@ -102,9 +102,9 @@
                 border-bottom: 2px solid black;
               "
             >
-              <option value="bsit">BSIT</option>
-              <option value="bscs">BSCS</option>
-              <option value="act">ACT</option>
+              <option value="BSIT">BSIT</option>
+              <option value="BSCS">BSCS</option>
+              <option value="ACT">ACT</option>
             </select>
           </div>
           <br />
@@ -113,7 +113,7 @@
             <select
               name="level"
               id="level"
-              ng-model="level"
+              ng-model="newStudent.level"
               style="
                 text-align: center;
                 width: 100%;
@@ -129,8 +129,15 @@
           </div>
           <br />
           <div>
-            <button class="w3-blue w3-padding w3-margin-right">SAVE</button>
-            <button class="w3-blue w3-padding">CANCEL</button>
+            <button
+              class="w3-blue w3-padding w3-margin-right"
+              ng-click="AddStudent()"
+            >
+              SAVE
+            </button>
+            <button class="w3-blue w3-padding" ng-click="ResetForm()">
+              CANCEL
+            </button>
           </div>
         </form>
       </div>
@@ -166,16 +173,82 @@
               <th>course & level</th>
               <th>action</th>
             </tr>
-            <tr>
-              <td>0001</td>
-              <td>DURANO, DENNIS</td>
-              <td>BSCPE-2</td>
+            <tr ng-repeat="student in studentList">
+              <td>{{ student.idno }}</td>
               <td>
-                <button>edit</button>
-                <button>delete</button>
+                <span ng-hide="student.edit"
+                  >{{ student.lastname }}, {{ student.firstname }}</span
+                >
+                <div class="w3-row">
+                  <input
+                    class="w3-third"
+                    ng-show="student.edit"
+                    ng-model="student.lastname"
+                    type="text"
+                  />
+                  <input
+                    class="w3-half"
+                    ng-show="student.edit"
+                    ng-model="student.firstname"
+                    type="text"
+                  />
+                </div>
+              </td>
+              <td>
+                <span ng-hide="student.edit"
+                  >{{ student.course }}-{{ student.level }}</span
+                >
+                <div class="w3-row">
+                  <select
+                    class="w3-half"
+                    ng-show="student.edit"
+                    ng-model="student.course"
+                    style="
+                      text-align: center;
+                      border: none;
+                      border-bottom: 2px solid black;
+                    "
+                  >
+                    <option value="BSIT">BSIT</option>
+                    <option value="BSCS">BSCS</option>
+                    <option value="ACT">ACT</option>
+                  </select>
+                  <select
+                    class="w3-half"
+                    ng-show="student.edit"
+                    ng-model="student.level"
+                    style="
+                      text-align: center;
+                      border: none;
+                      border-bottom: 2px solid black;
+                    "
+                  >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </select>
+                </div>
+              </td>
+              <td>
+                <button ng-click="EditStudent(student)">edit</button>
+                <button ng-click="DeleteStudent(student.idno)">delete</button>
               </td>
             </tr>
           </table>
+        </div>
+        <br />
+        <br />
+        <div class="w3-row">
+          <div class="w3-rest w3-container"></div>
+          <div class="w3-col w3-right w3-container" style="width: 100px">
+            <button
+              class="w3-blue w3-padding w3-margin-right"
+              ng-click="SaveTable()"
+            >
+              SAVE
+            </button>
+          </div>
         </div>
       </div>
     </div>
