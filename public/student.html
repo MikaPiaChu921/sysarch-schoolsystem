@@ -44,7 +44,7 @@
       <div class="w3-third w3-card-2 w3-round-xlarge w3-padding">
         <form style="padding: 10px; width: 100%">
           <div>
-            <label>ID no.</label><br />
+            <label>ID NO.</label><br />
             <input
               type="number"
               id="idno"
@@ -59,7 +59,7 @@
           </div>
           <br />
           <div>
-            <label>lastname</label><br />
+            <label>LASTNAME</label><br />
             <input
               type="text"
               id="lastname"
@@ -74,7 +74,7 @@
           </div>
           <br />
           <div>
-            <label>firstname</label> <br />
+            <label>FIRSTNAME</label> <br />
             <input
               type="text"
               id="firstname"
@@ -90,7 +90,7 @@
           </div>
           <br />
           <div>
-            <label>course</label><br />
+            <label>COURSE</label><br />
             <select
               name="course"
               id="course"
@@ -109,7 +109,7 @@
           </div>
           <br />
           <div>
-            <label>level</label><br />
+            <label>LEVEL</label><br />
             <select
               name="level"
               id="level"
@@ -146,13 +146,13 @@
       >
         <br />
         <div class="w3-row">
-          <div class="w3-quarter">
+          <!-- <div class="w3-quarter">
             <select ng-model="pageSize">
               <option ng-repeat="size in pagesizes" value="{{ size }}">
                 {{ size }}
               </option>
             </select>
-          </div>
+          </div> -->
           <div class="w3-right w3-half" style="height: 100%">
             <label for="searchInput"></label>
             <input
@@ -168,16 +168,17 @@
         <div>
           <table class="w3-table-all">
             <tr>
-              <th>ID no.</th>
-              <th>name</th>
-              <th>course & level</th>
-              <th>action</th>
+              <th>ID NO.</th>
+              <th>NAME</th>
+              <th>COURSE & LEVEL</th>
+              <th>ACTION</th>
             </tr>
             <tr ng-repeat="student in studentList">
               <td>{{ student.idno }}</td>
               <td>
                 <span ng-hide="student.edit"
-                  >{{ student.lastname }}, {{ student.firstname }}</span
+                  >{{ student.lastname | uppercase }}, {{ student.firstname |
+                  uppercase }}</span
                 >
                 <div class="w3-row">
                   <input
