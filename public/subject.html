@@ -47,18 +47,18 @@
             <label>edp code</label><br />
             <input
               type="number"
-              id="edpcode"
-              ng-model="edpcode"
+              id="newSubject.edpcode"
+              ng-model="newSubject.edpcode"
               style="width: 100%; border: none; border-bottom: 2px solid black"
             />
           </div>
           <br />
           <div>
-            <label>subject level</label><br />
+            <label>subject code</label><br />
             <input
               type="text"
               id="sujectlvl"
-              ng-model="subjectlvl"
+              ng-model="newSubject.subjectcode"
               style="width: 100%; border: none; border-bottom: 2px solid black"
             />
           </div>
@@ -68,7 +68,7 @@
             <input
               type="time"
               id="time"
-              ng-model="time"
+              ng-model="newSubject.time_1"
               style="
                 width: 30%;
                 border: none;
@@ -80,7 +80,7 @@
             <input
               type="time"
               id="time1"
-              ng-model="time1"
+              ng-model="newSubject.time_2"
               style="
                 width: 30%;
                 border: none;
@@ -95,27 +95,27 @@
             <div class="w3-row w3-container" style="width: 100%">
               <div class="w3-threequarter w3-center" style="width: 30px">
                 <label for="M">M</label><br />
-                <input type="checkbox" id="M" ng-model="M" />
+                <input type="checkbox" id="M" ng-model="newSubject.M" />
               </div>
               <div class="w3-threequarter w3-center" style="width: 30px">
                 <label for="T">T</label><br />
-                <input type="checkbox" id="T" ng-model="T" />
+                <input type="checkbox" id="T" ng-model="newSubject.T" />
               </div>
               <div class="w3-threequarter w3-center" style="width: 30px">
                 <label for="W">W</label><br />
-                <input type="checkbox" id="W" ng-model="W" />
+                <input type="checkbox" id="W" ng-model="newSubject.W" />
               </div>
               <div class="w3-threequarter w3-center" style="width: 30px">
                 <label for="TH">TH</label><br />
-                <input type="checkbox" id="TH" ng-model="TH" />
+                <input type="checkbox" id="TH" ng-model="newSubject.TH" />
               </div>
               <div class="w3-threequarter w3-center" style="width: 30px">
                 <label for="F">F</label><br />
-                <input type="checkbox" id="F" ng-model="F" />
+                <input type="checkbox" id="F" ng-model="newSubject.F" />
               </div>
               <div class="w3-threequarter w3-center" style="width: 30px">
                 <label for="S">S</label><br />
-                <input type="checkbox" id="S" ng-model="S" />
+                <input type="checkbox" id="S" ng-model="newSubject.S" />
               </div>
             </div>
           </div>
@@ -125,13 +125,18 @@
             <input
               type="text"
               id="room"
-              ng-model="room"
+              ng-model="newSubject.room"
               style="width: 100%; border: none; border-bottom: 2px solid black"
             />
           </div>
           <br />
           <div>
-            <button class="w3-blue w3-padding w3-margin-right">SAVE</button>
+            <button
+              class="w3-blue w3-padding w3-margin-right"
+              ng-click="SaveSubject(newSubject)"
+            >
+              SAVE
+            </button>
             <button class="w3-blue w3-padding">CANCEL</button>
           </div>
         </form>
@@ -169,27 +174,78 @@
               <th>room</th>
               <th>action</th>
             </tr>
-            <tr>
-              <td>0435</td>
-              <td>SYSARCH</td>
-              <td>5:30 - 6:30 MW</td>
-              <td>530B</td>
+            <tr ng-repeat="subject in subjectList">
+              <td>{{ subject.edpcode }}</td>
               <td>
-                <button>edit</button>
-                <button>delete</button>
+                <span ng-hide="subject.edit">{{ subject.subjectcode }}</span>
+                <input
+                  ng-show="subject.edit"
+                  ng-model="subject.subjectcode"
+                  type="text"
+                />
               </td>
-            </tr>
-            <tr>
-              <td>0421</td>
-              <td>COMP 100</td>
-              <td>1:30 - 2:30 TTH</td>
-              <td>535</td>
               <td>
-                <button>edit</button>
-                <button>delete</button>
+                <span ng-hide="subject.edit"
+                  >{{ subject.time }} {{ subject.days }}</span
+                >
+                <div class="w3-row" ng-show="subject.edit">
+                  <input
+                    type="time"
+                    id="time"
+                    ng-model="subject.time_1"
+                    style="
+                      width: 30%;
+                      border: none;
+                      border-bottom: 2px solid black;
+                      margin-right: 5px;
+                    "
+                  />—<input
+                    type="time"
+                    id="time1"
+                    ng-model="subject.time_2"
+                    style="
+                      width: 30%;
+                      border: none;
+                      border-bottom: 2px solid black;
+                      margin-left: 5px;
+                    "
+                  />
+                  <input
+                    style="width: 100px"
+                    ng-model="subject.days"
+                    type="text"
+                  />
+                </div>
+              </td>
+              <td>
+                <span ng-hide="subject.edit">{{ subject.room }}</span>
+                <input
+                  ng-show="subject.edit"
+                  type="text"
+                  ng-model="subject.room"
+                />
+              </td>
+              <td>
+                <button ng-click="ToggleEdit(subject)">edit</button>
+                <button ng-click="DeleteSubject(subject.edpcode)">
+                  delete
+                </button>
               </td>
             </tr>
           </table>
+        </div>
+        <br />
+        <br />
+        <div class="w3-row">
+          <div class="w3-rest w3-container"></div>
+          <div class="w3-col w3-right w3-container" style="width: 100px">
+            <button
+              class="w3-blue w3-padding w3-margin-right"
+              ng-click="SaveTable()"
+            >
+              SAVE
+            </button>
+          </div>
         </div>
       </div>
     </div>

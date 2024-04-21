@@ -78,6 +78,47 @@ app.put("/students", (req, res) => {
   });
 });
 
+// retrieve subjects
+app.get("/subject", (req, res) => {
+  const query = "SELECT * FROM `subject`";
+  databaseConnection.query(query, (err, result, fields) => {
+    if (err) res.status(500).json(err);
+    res.json({ subjects: result });
+  });
+});
+
+// add subject
+app.post("/subject", (req, res) => {
+  const subject = req.body;
+  const query =
+    "INSERT INTO `subject` (`edpcode`,`subjectcode`,`time`,`days`,`room`) VALUES " +
+    `('${subject.edpcode}', '${subject.subjectcode}', '${subject.time}', '${subject.days}', '${subject.room}')`;
+  databaseConnection.query(query, (err, results, fields) => {
+    if (err) res.status(500).json(err);
+    res.json({ Message: "New Subject Added" });
+  });
+});
+
+// delete student
+app.delete("/subject/:edpcode", (req, res) => {
+  const edpcode = req.params.edpcode;
+  const query = `DELETE FROM \`subject\` WHERE \`edpcode\` = '${edpcode}'`;
+  databaseConnection.query(query, (err, results, fields) => {
+    if (err) res.status(500).json(err);
+    res.json({ Message: "Subject was deleted" });
+  });
+});
+
+// update student
+app.put("/subject", (req, res) => {
+  const subject = req.body;
+  const query = `UPDATE \`subject\` SET \`subjectcode\`='${subject.subjectcode}', \`time\`='${subject.time}', \`days\`='${subject.days}', \`room\`='${subject.room}' WHERE \`edpcode\`='${subject.edpcode}'`;
+  databaseConnection.query(query, (err, results, fields) => {
+    if (err) res.status(500).json(err);
+    res.json({ Message: "Subject was updated" });
+  });
+});
+
 app.listen("4321", () => {
   console.log("listening at port 4321");
 });
