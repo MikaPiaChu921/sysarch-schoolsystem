@@ -73,7 +73,7 @@ app.config(function ($routeProvider) {
   });
   $routeProvider.when("/report", {
     templateUrl: "reports.html",
-    controller: "mainctrl",
+    controller: "subjectctrl",
     resolve: {
       check: function ($location, $rootScope) {
         if (!IsLoggedIn()) {
@@ -125,6 +125,13 @@ app.controller("loginctrl", function ($scope, $rootScope, $location, $http) {
 });
 
 app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
+  $scope.logout = function () {
+    // logout the user
+    $rootScope.loggedIn = false;
+    $location.path("/");
+    document.cookie = "sessionCookie=; Max-Age=-99999999;";
+  };
+
   $scope.subjectList = [];
   const initDate = () => {
     const date = new Date();
