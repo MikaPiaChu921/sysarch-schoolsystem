@@ -48,25 +48,27 @@
             <input
               type="number"
               id="edpcode"
-              ng-model="edpcode"
+              ng-model="EDPCODE"
               style="width: 20%; border: none; border-bottom: 2px solid black"
             />
 
-            <button>GO</button>
+            <button ng-click="FindSubject()">GO</button>
           </div>
           <br />
           <br />
-          <div class="w3-row">
+          <div class="w3-row" ng-show="SubjectData">
             <div class="w3-padding w3-half">
               <h5>
-                0485 &nbsp; &nbsp; SYSARCH &nbsp; &nbsp; 5:30 - 6:30 &nbsp;
-                &nbsp; MW &nbsp; &nbsp; 530B
+                {{ SubjectData.edpcode }} &nbsp; {{ SubjectData.subjectcode }}
+                &nbsp; {{ SubjectData.time }}{{ SubjectData.days }} &nbsp; {{
+                SubjectData.room }}
               </h5>
             </div>
             <div class="w3-half">
               <button
                 class="w3-round-xxlarge w3-padding w3-red"
                 style="width: 30%"
+                ng-click="DeleteEnrolledStudents()"
               >
                 DELETE
               </button>
@@ -83,19 +85,22 @@
                 <th>LEVEL</th>
                 <th>SELECT</th>
               </tr>
-              <tr>
-                <td>0001</td>
-                <td>DURANO</td>
-                <td>DENNIS</td>
-                <td>BSCPE</td>
-                <td>1</td>
+              <tr
+                ng-repeat="student in EnrolledStudents"
+                title="Enrolled by: {{ student.enrolled_by }}"
+              >
+                <td>{{ student.idno }}</td>
+                <td>{{ student.lastname }}</td>
+                <td>{{ student.firstname }}</td>
+                <td>{{ student.course }}</td>
+                <td>{{ student.level }}</td>
                 <td>
                   <div class="w3-threequarter">
                     <label></label>
                     <input
                       type="checkbox"
                       id="delete"
-                      ng-model="delete"
+                      ng-model="student.toDelete"
                       style="height: 20px; width: 50px"
                     />
                   </div>
@@ -108,7 +113,12 @@
           <div class="w3-row">
             <div class="w3-rest w3-container"></div>
             <div class="w3-col w3-right w3-container" style="width: 100px">
-              <button class="w3-blue w3-padding w3-margin-right">SAVE</button>
+              <button
+                class="w3-blue w3-padding w3-margin-right"
+                ng-click="SaveReport()"
+              >
+                SAVE
+              </button>
             </div>
           </div>
         </form>

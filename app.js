@@ -47,6 +47,15 @@ app.post("/userlogin", (req, res) => {
   }, 100);
 });
 
+// retrieve user by Id
+app.get("/user/:id", (req, res) => {
+  const query = "SELECT email from `user` WHERE id = "+`'${req.params.id}'`;
+  databaseConnection.query(query, (err, result, field) => {
+    if (err) res.status(500).json(err);
+    res.json(result);
+  });
+});
+
 // retrieve students
 app.get("/students", (req, res) => {
   const query = "SELECT * FROM `student`";

@@ -269,7 +269,7 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     });
   };
 
-  /* ENROLLMENT RELATED */
+  /* ENROLLMENT AND REPORT RELATED */
 
   $scope.StudentID = undefined;
   $scope.StudentData = undefined;
@@ -278,6 +278,8 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
   $scope.SubjectData = undefined;
   $scope.EDPCODE = undefined;
   $scope.Enrolled = false;
+  $scope.EnrolledStudents = [];
+  $scope.TempToDeleteStudent = []
 
   $scope.getStudentsList = () => {
     $http({
@@ -307,6 +309,34 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
       }
     })
   }
+
+  $scope.LoadEnrolledStudents = () => {
+    // clear the subjects
+    $scope.EnrolledStudents = []
+    if(!$scope.SubjectData) return;
+
+    $http({
+      method: "get",
+      url: "enrollment"
+    }).then(({data}) => {
+      for(let enrollmentData of data){
+        if(enrollmentData.edpcode === $scope.SubjectData.edpcode){
+          for(let student of $scope.studentList){
+            if(student.idno === enrollmentData.idno){
+              $http({
+                method: "get",
+                url: `user/${enrollmentData.enrolled_by}`
+              }).then(({data})=> {
+                student.enrolled_by = data[0].email;
+                $scope.EnrolledStudents.push(student)
+              })
+            }
+          }
+        }
+      }
+    })
+  }
+
 
   $scope.FindStudent = (StudentID) => {
     if (!$scope.StudentID) {
@@ -343,7 +373,7 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     for(const subject of $scope.subjectList){
       if(subject.edpcode === ""+$scope.EDPCODE){
 
-        $scope.SubjectData = subject
+        $scope.SubjectData = subject;
         for(let enrolledSubjects of $scope.studentEnrolledSubjects){
           if(enrolledSubjects.edpcode === subject.edpcode){
             $scope.Enrolled = true;
@@ -353,6 +383,7 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
       }
     }
 
+    $scope.LoadEnrolledStudents();
     if(!$scope.SubjectData){
       alert("Coudn't find Course")
     }
@@ -408,6 +439,32 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     $scope.SubjectData = undefined;
     $scope.EDPCODE = undefined;
     $scope.Enrolled = false;
+  }
+
+  // DeleteEnrolledStudents
+  $scope.DeleteEnrolledStudents = () => {
+    $scope.TempToDeleteStudent = []
+    $scope.TempToDeleteStudent = $scope.EnrolledStudents.filter((e) => e.toDelete);
+    $scope.EnrolledStudents = $scope.EnrolledStudents.filter((e) => !e.toDelete);
+  }
+
+  // SaveReport
+  $scope.SaveReport = () => {
+    let rowsAffected = 0;
+    for(let enrolledStudent of $scope.TempToDeleteStudent){
+      if(enrolledStudent.toDelete){
+        $http({
+          method: "delete",
+          url: `enrollment/${enrolledStudent.idno}/${$scope.SubjectData.edpcode}`
+        })
+        rowsAffected++;
+      }
+    }
+
+    if(rowsAffected > 0){
+      alert(`Data Saved! ${rowsAffected} row(s) affected.`)
+      $scope.LoadEnrolledStudents();
+    }
   }
 
   $scope.RetrieveSubjects();
