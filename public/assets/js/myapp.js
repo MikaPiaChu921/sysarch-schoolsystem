@@ -1,6 +1,21 @@
 //using es5 javascript
 var app = angular.module("myapp", ["ngRoute"]);
 
+function GetLoggedInUser() {
+  cookieData = document.cookie.split("; ");
+
+  for (let i = 0; i < cookieData.length; i++) {
+    cookieData[i] = cookieData[i].split("=");
+    cookieName = cookieData[i][0];
+    cookieValue = cookieData[i][1];
+
+    if (cookieName === "sessionCookie") {
+      return cookieValue;
+    }
+  }
+  return undefined;
+}
+
 app.config(function ($routeProvider) {
   function IsLoggedIn() {
     cookieData = document.cookie.split("; ");
@@ -252,6 +267,11 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
   $scope.StudentID = undefined;
   $scope.StudentData = undefined;
   $scope.studentList = [];
+  $scope.studentEnrolledSubjects = [];
+  $scope.SubjectData = undefined;
+  $scope.EDPCODE = undefined;
+  $scope.Enrolled = false;
+
   $scope.getStudentsList = () => {
     $http({
       method: "get",
@@ -261,24 +281,127 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     });
   };
 
+  $scope.LoadEnrolledSubjects = () => {
+    // clear the subjects
+    $scope.studentEnrolledSubjects = []
+    $http({
+      method: "get",
+      url: "enrollment"
+    }).then(({data}) => {
+      for(let enrollmentData of data){
+        if(enrollmentData.idno === $scope.StudentData.idno){
+          for(const subject of $scope.subjectList){
+            if(subject.edpcode === enrollmentData.edpcode){
+
+              $scope.studentEnrolledSubjects.push(subject);
+            }
+          }
+        }
+      }
+    })
+  }
+
   $scope.FindStudent = (StudentID) => {
     if (!$scope.StudentID) {
       alert("Student ID should not be empty!");
       return;
     }
     $scope.StudentData = undefined;
+    $scope.SubjectData = undefined;
+    $scope.studentEnrolledSubjects = []
 
     for (const student of $scope.studentList) {
       if (student.idno === StudentID + "") {
         $scope.StudentData = student;
-        console.log("found");
+        $scope.LoadEnrolledSubjects();
         break;
       }
     }
     if (!$scope.StudentData) {
-      alert("Couldn't find student");
+      setTimeout(()=>{
+        alert("Couldn't find student");
+      },200)
     }
   };
+
+  $scope.FindSubject = () => {
+    $scope.SubjectData = undefined;
+    $scope.Enrolled = false;
+
+    if (!$scope.EDPCODE) {
+      alert("EDPCODE should not be empty!");
+      return;
+    }
+
+    for(const subject of $scope.subjectList){
+      if(subject.edpcode === ""+$scope.EDPCODE){
+
+        $scope.SubjectData = subject
+        for(let enrolledSubjects of $scope.studentEnrolledSubjects){
+          if(enrolledSubjects.edpcode === subject.edpcode){
+            $scope.Enrolled = true;
+            break;
+          }
+        }
+      }
+    }
+
+    if(!$scope.SubjectData){
+      alert("Coudn't find Course")
+    }
+  }
+
+  $scope.Enroll = () => {
+    if(!$scope.SubjectData) return;
+    if(!$scope.StudentData) return;
+
+    $http({
+      method: "post",
+      url: "enrollment",
+      data: {
+        idno: $scope.StudentData.idno,
+        edpcode: $scope.SubjectData.edpcode,
+        enrolled_by: GetLoggedInUser() ?? 0
+      }
+    }).then((r) => {
+      $scope.RetrieveSubjects();
+      $scope.getStudentsList();
+      $scope.LoadEnrolledSubjects();
+      $scope.SubjectData = undefined;
+      setTimeout(() => {
+        alert(r.data.Message);
+      }, 500)
+    })
+  }
+
+  $scope.SaveEnrollment = () => {
+    let rowsAffected = 0;
+    for(let enrolledSubject of $scope.studentEnrolledSubjects){
+      if(enrolledSubject.toDelete){
+        $http({
+          method: "delete",
+          url: `enrollment/${$scope.StudentData.idno}/${enrolledSubject.edpcode}`
+        })
+        rowsAffected++;
+      }
+    }
+
+    if(rowsAffected > 0){
+      alert(`Data Saved! ${rowsAffected} row(s) affected.`)
+      $scope.LoadEnrolledSubjects();
+    }
+  }
+
+  // Clear Enrollment User
+  $scope.ClearEnrollment = () => {
+    $scope.StudentID = undefined;
+    $scope.StudentData = undefined;
+    $scope.studentList = [];
+    $scope.studentEnrolledSubjects = [];
+    $scope.SubjectData = undefined;
+    $scope.EDPCODE = undefined;
+    $scope.Enrolled = false;
+  }
 
   $scope.RetrieveSubjects();
   $scope.getStudentsList();

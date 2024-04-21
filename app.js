@@ -39,12 +39,12 @@ app.post("/userlogin", (req, res) => {
   });
   setTimeout(() => {
     if (user) {
-      res.cookie("sessionCookie", JSON.stringify(user));
+      res.cookie("sessionCookie", user[0].id);
       res.status(200).send(user);
       return;
     }
     res.status(401).send({ Message: "Invalid username or password!" });
-  }, 1_000);
+  }, 100);
 });
 
 // retrieve students
@@ -128,6 +128,37 @@ app.put("/subject", (req, res) => {
     res.json({ Message: "Subject was updated" });
   });
 });
+
+// get enrolled
+app.get("/enrollment", (req, res) => {
+  const query = "SELECT * from `enrollment`"
+  databaseConnection.query(query, (err, results, fields) => {
+    if(err) res.status(500).json(err);
+    res.json(results ?? [])
+  })
+})
+
+// enroll
+app.post("/enrollment", (req, res) => {
+  const data = req.body;
+  const query = `INSERT INTO \`enrollment\` (\`idno\`, \`edpcode\`, \`enrolled_by\`) VALUES ('${data.idno}', '${data.edpcode}', '${data.enrolled_by}')`;
+  databaseConnection.query(query, (err, result, field) => {
+    if(err) res.status(500).json(err);
+    res.json({Message: "Student Enrolled"})
+  });
+})
+
+// delete
+app.delete("/enrollment/:idno/:edpcode", (req, res) => {
+  const idno = req.params.idno;
+  const edpcode = req.params.edpcode;
+  const query = `DELETE FROM \`enrollment\` WHERE \`idno\`='${idno}' AND \`edpcode\`='${edpcode}'`;
+  databaseConnection.query(query, (err, result, field) => {
+    if(err) res.status(500).json(err);
+    res.json({Message: "Student unenrolled"});
+  });
+})
+
 
 app.listen("4321", () => {
   console.log("listening at port 4321");
