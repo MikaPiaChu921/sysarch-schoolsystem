@@ -30,11 +30,21 @@ app.get("/", (req, res) => {
 });
 
 app.post("/userlogin", (req, res) => {
+  const query = "select * from `user`";
   let email = req.body.email;
   let password = req.body.password;
-  let user = users.filter((el) => el.email == email && el.password == password);
-  res.cookie("sessionCookie", JSON.stringify(user));
-  res.status(200).send(user);
+  let user = undefined;
+  databaseConnection.query(query, (err, result, field) => {
+    user = result.filter((el) => el.email == email && el.password == password);
+  });
+  setTimeout(() => {
+    if (user) {
+      res.cookie("sessionCookie", JSON.stringify(user));
+      res.status(200).send(user);
+      return;
+    }
+    res.status(401).send({ Message: "Invalid username or password!" });
+  }, 1_000);
 });
 
 // retrieve students
