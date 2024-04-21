@@ -46,7 +46,7 @@ app.config(function ($routeProvider) {
   });
   $routeProvider.when("/enrollment", {
     templateUrl: "enrollment.html",
-    controller: "mainctrl",
+    controller: "subjectctrl",
     resolve: {
       check: function ($location, $rootScope) {
         if (!IsLoggedIn()) {
@@ -247,7 +247,41 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     });
   };
 
+  /* ENROLLMENT RELATED */
+
+  $scope.StudentID = undefined;
+  $scope.StudentData = undefined;
+  $scope.studentList = [];
+  $scope.getStudentsList = () => {
+    $http({
+      method: "get",
+      url: "students",
+    }).then(function (response) {
+      $scope.studentList = response.data.students;
+    });
+  };
+
+  $scope.FindStudent = (StudentID) => {
+    if (!$scope.StudentID) {
+      alert("Student ID should not be empty!");
+      return;
+    }
+    $scope.StudentData = undefined;
+
+    for (const student of $scope.studentList) {
+      if (student.idno === StudentID + "") {
+        $scope.StudentData = student;
+        console.log("found");
+        break;
+      }
+    }
+    if (!$scope.StudentData) {
+      alert("Couldn't find student");
+    }
+  };
+
   $scope.RetrieveSubjects();
+  $scope.getStudentsList();
 });
 ///
 app.controller("mainctrl", function ($scope, $http, $location, $rootScope) {

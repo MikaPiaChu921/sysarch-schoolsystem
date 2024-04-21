@@ -48,11 +48,11 @@
             <input
               type="number"
               id="idno"
-              ng-model="idno"
+              ng-model="StudentID"
               style="width: 25%; border: none; border-bottom: 2px solid black"
             />
 
-            <button>GO</button>
+            <button ng-click="FindStudent(StudentID)">GO</button>
           </div>
           <br />
           <br />
@@ -60,10 +60,15 @@
             <div
               class="w3-card w3-padding w3-half"
               style="border: 2px SOLID GRAY; width: 50%; color: gray"
+              ng-show="StudentData"
             >
-              <h5>DURANO, DENNIS &nbsp; &nbsp; BSCPE &nbsp; &nbsp; 1</h5>
+              <h5>
+                {{ StudentData.lastname }}, {{ StudentData.firstname }} &nbsp;
+                &nbsp; {{ StudentData.course }} &nbsp; &nbsp; {{
+                StudentData.level }}
+              </h5>
             </div>
-            <div class="w3-half">
+            <div class="w3-half" ng-show="StudentData">
               <button
                 class="w3-round-xxlarge w3-padding w3-red"
                 style="width: 30%"
@@ -100,30 +105,16 @@
                 <th>ROOM</th>
                 <th>DELETE</th>
               </tr>
-              <tr>
-                <td>0435</td>
-                <td>SYSARCH</td>
-                <td>5:30 - 6:30</td>
-                <td>MW</td>
-                <td>530B</td>
+              <tr ng-repeat="subject in subjectList">
+                <td>{{ subject.edpcode }}</td>
                 <td>
-                  <div class="w3-threequarter">
-                    <label></label>
-                    <input
-                      type="checkbox"
-                      id="delete"
-                      ng-model="delete"
-                      style="height: 20px; width: 50px"
-                    />
-                  </div>
+                  <span>{{ subject.subjectcode }}</span>
                 </td>
-              </tr>
-              <tr>
-                <td>0421</td>
-                <td>COMP 100</td>
-                <td>12:30 - 1:30</td>
-                <td>MW</td>
-                <td>535B</td>
+                <td>
+                  <span>{{ subject.time }} </span>
+                </td>
+                <td>{{ subject.days }}</td>
+                <td>{{ subject.room }}</td>
                 <td>
                   <div class="w3-threequarter">
                     <label></label>
