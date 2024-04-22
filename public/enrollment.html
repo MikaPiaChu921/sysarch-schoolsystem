@@ -59,19 +59,19 @@
           <div class="w3-row">
             <div
               class="w3-card w3-padding w3-half"
-              style="border: 2px SOLID GRAY; width: 50%; color: gray"
+              style="border: 2px SOLID GRAY; width: 30%; color: gray"
               ng-show="StudentData"
             >
               <h5>
-                {{ StudentData.lastname }}, {{ StudentData.firstname }} &nbsp;
-                &nbsp; {{ StudentData.course }} &nbsp; &nbsp; {{
-                StudentData.level }}
+                {{ StudentData.lastname | uppercase}}, &nbsp; &nbsp;{{
+                StudentData.firstname | uppercase}} &nbsp; &nbsp; {{
+                StudentData.course }} &nbsp; &nbsp; {{ StudentData.level }}
               </h5>
             </div>
             <div class="w3-half" ng-show="StudentData">
               <button
                 class="w3-round-xxlarge w3-padding w3-red"
-                style="width: 30%"
+                style="width: 30%; margin-left: 50%"
                 ng-click="ClearEnrollment()"
               >
                 DELETE
@@ -95,10 +95,12 @@
             />
             <button ng-click="FindSubject()">SEARCH</button>
           </div>
+          <br />
+          <br />
           <div class="w3-row" ng-show="SubjectData && StudentData">
             <div
               class="w3-card w3-padding w3-half"
-              style="border: 2px SOLID GRAY; width: 50%; color: gray"
+              style="border: 2px SOLID GRAY; width: 30%; color: gray"
             >
               <h5>
                 {{ SubjectData.edpcode }} &nbsp; {{ SubjectData.subjectcode }}
@@ -106,10 +108,11 @@
                 SubjectData.room }}
               </h5>
             </div>
+
             <div class="w3-half" ng-show="SubjectData">
               <button
                 class="w3-round-xxlarge w3-padding w3-red"
-                style="width: 30%"
+                style="width: 30%; margin-left: 50%"
                 ng-disabled="Enrolled"
                 ng-click="Enroll()"
                 ng-hide="Enrolled"
@@ -118,7 +121,7 @@
               </button>
               <button
                 class="w3-round-xxlarge w3-padding w3-green"
-                style="width: 30%"
+                style="width: 30%; margin-left: 50%"
                 ng-disabled="Enrolled"
                 ng-show="Enrolled"
               >
