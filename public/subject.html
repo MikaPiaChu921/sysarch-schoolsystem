@@ -44,7 +44,7 @@
       <div class="w3-third w3-card-2 w3-round-xlarge w3-padding">
         <form style="padding: 10px; width: 100%">
           <div>
-            <label>edp code</label><br />
+            <label>EDP NO.</label><br />
             <input
               type="number"
               id="newSubject.edpcode"
@@ -54,7 +54,7 @@
           </div>
           <br />
           <div>
-            <label>subject code</label><br />
+            <label>SUBJECT CODE</label><br />
             <input
               type="text"
               id="sujectlvl"
@@ -64,7 +64,7 @@
           </div>
           <br />
           <div>
-            <label>time</label> <br />
+            <label>TIME</label> <br />
             <input
               type="time"
               id="time"
@@ -91,7 +91,8 @@
           </div>
           <br />
           <div>
-            <label>days</label> <br />
+            <label>DAYS</label> <br />
+            <br />
             <div class="w3-row w3-container" style="width: 100%">
               <div class="w3-threequarter w3-center" style="width: 30px">
                 <label for="M">M</label><br />
@@ -121,7 +122,7 @@
           </div>
           <br />
           <div>
-            <label>room</label><br />
+            <label>ROOM</label><br />
             <input
               type="text"
               id="room"
@@ -168,11 +169,11 @@
         <div>
           <table class="w3-table-all">
             <tr>
-              <th>edp no.</th>
-              <th>subject code</th>
-              <th>time & day</th>
-              <th>room</th>
-              <th>action</th>
+              <th>EDP NO.</th>
+              <th>SUBJECT CODE</th>
+              <th>TIME & DAY</th>
+              <th>ROOM</th>
+              <th>ACTION</th>
             </tr>
             <tr ng-repeat="subject in subjectList">
               <td>{{ subject.edpcode }}</td>
@@ -226,9 +227,9 @@
                 />
               </td>
               <td>
-                <button ng-click="ToggleEdit(subject)">edit</button>
+                <button ng-click="ToggleEdit(subject)">EDIT</button>
                 <button ng-click="DeleteSubject(subject.edpcode)">
-                  delete
+                  DELETE
                 </button>
               </td>
             </tr>

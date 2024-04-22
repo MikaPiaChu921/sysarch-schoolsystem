@@ -57,17 +57,20 @@
           <br />
           <br />
           <div class="w3-row" ng-show="SubjectData">
-            <div class="w3-padding w3-half">
+            <div
+              class="w3-card w3-padding w3-half"
+              style="border: 2px SOLID GRAY; width: 30%; color: gray"
+            >
               <h5>
                 {{ SubjectData.edpcode }} &nbsp; {{ SubjectData.subjectcode }}
-                &nbsp; {{ SubjectData.time }}{{ SubjectData.days }} &nbsp; {{
-                SubjectData.room }}
+                &nbsp; {{ SubjectData.time }} &nbsp; {{ SubjectData.days }}
+                &nbsp; {{ SubjectData.room }}
               </h5>
             </div>
             <div class="w3-half">
               <button
                 class="w3-round-xxlarge w3-padding w3-red"
-                style="width: 30%"
+                style="width: 30%; margin-left: 50%"
                 ng-click="DeleteEnrolledStudents()"
               >
                 DELETE
