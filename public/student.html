@@ -146,21 +146,23 @@
       >
         <br />
         <div class="w3-row">
-          <!-- <div class="w3-quarter">
+          <div class="w3-quarter">
             <select ng-model="pageSize">
               <option ng-repeat="size in pagesizes" value="{{ size }}">
                 {{ size }}
               </option>
             </select>
-          </div> -->
+            Select size
+          </div>
           <div class="w3-right w3-half" style="height: 100%">
-            <label for="searchInput"></label>
+            <label for="search"></label>
             <input
               placeholder="🔎 search..."
               type="text"
-              id="searchInput"
-              ng-model="search.query"
+              id="search"
+              ng-model="search"
               style="border-radius: 10px; padding: 3px; font-size: 12px"
+              class="w3-padding w3-right"
             />
           </div>
         </div>
@@ -173,7 +175,9 @@
               <th>COURSE & LEVEL</th>
               <th>ACTION</th>
             </tr>
-            <tr ng-repeat="student in studentList">
+            <tr
+              ng-repeat="student in studentList | orderBy:'lastname' | startFrom:currentPage * pageSize | limitTo:pageSize | filter:search"
+            >
               <td>{{ student.idno }}</td>
               <td>
                 <span ng-hide="student.edit"
@@ -241,8 +245,24 @@
         <br />
         <br />
         <div class="w3-row">
-          <div class="w3-rest w3-container"></div>
-          <div class="w3-col w3-right w3-container" style="width: 100px">
+          <div class="w3-half w3-container">
+            <div class="w3-left">
+              <button
+                ng-disabled="currentPage==0"
+                ng-click="currentPage=currentPage-1"
+              >
+                prev
+              </button>
+              {{ currentPage+1 }} / {{numberOfPages() }}
+              <button
+                ng-disabled="currentPage>=studentList.length/pageSize-1"
+                ng-click="nextPage()"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+          <div class="w3-half w3-right w3-container" style="width: 100px">
             <button
               class="w3-blue w3-padding w3-margin-right"
               ng-click="SaveTable()"

@@ -125,6 +125,11 @@ app.controller("loginctrl", function ($scope, $rootScope, $location, $http) {
 });
 
 app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
+  $scope.pagesizes = [5, 10, 15, 20];
+  $scope.pageSize = 5;
+  $scope.currentPage = 0;
+  $scope.search = "";
+
   $scope.logout = function () {
     // logout the user
     $rootScope.loggedIn = false;
@@ -152,6 +157,35 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
       url: "subject",
     }).then((response) => {
       $scope.subjectList = response.data.subjects;
+      for (let subject of $scope.subjectList) {
+        const time_1_orig = subject.time.split("-");
+        subject.time_1 = new Date();
+        subject.time_1.setHours(time_1_orig[0].split(":")[0]);
+        subject.time_1.setMinutes(time_1_orig[0].split(":")[1]);
+        subject.time_1.setSeconds(0);
+        subject.time_1.setMilliseconds(0);
+
+        subject.time_2 = new Date();
+        subject.time_2.setHours(time_1_orig[1].split(":")[0]);
+        subject.time_2.setMinutes(time_1_orig[1].split(":")[1]);
+        subject.time_2.setSeconds(0);
+        subject.time_2.setMilliseconds(0);
+
+        const time_1 = new Date(subject.time_1);
+        const time_2 = new Date(subject.time_2);
+        subject.time =
+          (time_1.getHours() > 12
+            ? time_1.getHours() - 12
+            : time_1.getHours()) +
+          ":" +
+          new String(time_1.getMinutes()).padStart(2, "0") +
+          "-" +
+          (time_2.getHours() > 12
+            ? time_2.getHours() - 12
+            : time_2.getHours()) +
+          ":" +
+          new String(time_2.getMinutes()).padStart(2, "0");
+      }
     });
   };
 
@@ -176,11 +210,11 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
       subject.time =
         (time_1.getHours() > 12 ? time_1.getHours() - 12 : time_1.getHours()) +
         ":" +
-        time_1.getMinutes() +
+        new String(time_1.getMinutes()).padStart(2, "0") +
         "-" +
         (time_2.getHours() > 12 ? time_2.getHours() - 12 : time_2.getHours()) +
         ":" +
-        time_2.getMinutes();
+        new String(time_2.getMinutes()).padStart(2, "0");
     }
 
     subject.edit = !subject.edit;
@@ -210,13 +244,13 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
             ? time_1.getHours() - 12
             : time_1.getHours()) +
           ":" +
-          time_1.getMinutes() +
+          new String(time_1.getMinutes()).padStart(2, "0") +
           "-" +
           (time_2.getHours() > 12
             ? time_2.getHours() - 12
             : time_2.getHours()) +
           ":" +
-          time_2.getMinutes();
+          new String(time_2.getMinutes()).padStart(2, "0");
 
         $http({
           method: "put",
@@ -227,10 +261,9 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
         rowsAffected++;
       }
 
-      alert(`Data saved! ${rowsAffected} row(s) affected.`);
-
       $scope.RetrieveSubjects();
     }
+    alert(`Data saved! ${rowsAffected} row(s) affected.`);
   };
 
   $scope.SaveSubject = (newSubject) => {
@@ -254,11 +287,11 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     subject.time =
       (time_1.getHours() > 12 ? time_1.getHours() - 12 : time_1.getHours()) +
       ":" +
-      time_1.getMinutes() +
+      new String(time_1.getMinutes()).padStart(2, "0") +
       "-" +
       (time_2.getHours() > 12 ? time_2.getHours() - 12 : time_2.getHours()) +
       ":" +
-      time_2.getMinutes();
+      new String(time_2.getMinutes()).padStart(2, "0");
     $http({
       method: "post",
       url: "subject",
@@ -279,7 +312,7 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
   $scope.EDPCODE = undefined;
   $scope.Enrolled = false;
   $scope.EnrolledStudents = [];
-  $scope.TempToDeleteStudent = []
+  $scope.TempToDeleteStudent = [];
 
   $scope.getStudentsList = () => {
     $http({
@@ -292,51 +325,49 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
 
   $scope.LoadEnrolledSubjects = () => {
     // clear the subjects
-    $scope.studentEnrolledSubjects = []
+    $scope.studentEnrolledSubjects = [];
     $http({
       method: "get",
-      url: "enrollment"
-    }).then(({data}) => {
-      for(let enrollmentData of data){
-        if(enrollmentData.idno === $scope.StudentData.idno){
-          for(const subject of $scope.subjectList){
-            if(subject.edpcode === enrollmentData.edpcode){
-
+      url: "enrollment",
+    }).then(({ data }) => {
+      for (let enrollmentData of data) {
+        if (enrollmentData.idno === $scope.StudentData.idno) {
+          for (const subject of $scope.subjectList) {
+            if (subject.edpcode === enrollmentData.edpcode) {
               $scope.studentEnrolledSubjects.push(subject);
             }
           }
         }
       }
-    })
-  }
+    });
+  };
 
   $scope.LoadEnrolledStudents = () => {
     // clear the subjects
-    $scope.EnrolledStudents = []
-    if(!$scope.SubjectData) return;
+    $scope.EnrolledStudents = [];
+    if (!$scope.SubjectData) return;
 
     $http({
       method: "get",
-      url: "enrollment"
-    }).then(({data}) => {
-      for(let enrollmentData of data){
-        if(enrollmentData.edpcode === $scope.SubjectData.edpcode){
-          for(let student of $scope.studentList){
-            if(student.idno === enrollmentData.idno){
+      url: "enrollment",
+    }).then(({ data }) => {
+      for (let enrollmentData of data) {
+        if (enrollmentData.edpcode === $scope.SubjectData.edpcode) {
+          for (let student of $scope.studentList) {
+            if (student.idno === enrollmentData.idno) {
               $http({
                 method: "get",
-                url: `user/${enrollmentData.enrolled_by}`
-              }).then(({data})=> {
+                url: `user/${enrollmentData.enrolled_by}`,
+              }).then(({ data }) => {
                 student.enrolled_by = data[0].email;
-                $scope.EnrolledStudents.push(student)
-              })
+                $scope.EnrolledStudents.push(student);
+              });
             }
           }
         }
       }
-    })
-  }
-
+    });
+  };
 
   $scope.FindStudent = (StudentID) => {
     if (!$scope.StudentID) {
@@ -345,7 +376,7 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     }
     $scope.StudentData = undefined;
     $scope.SubjectData = undefined;
-    $scope.studentEnrolledSubjects = []
+    $scope.studentEnrolledSubjects = [];
 
     for (const student of $scope.studentList) {
       if (student.idno === StudentID + "") {
@@ -355,9 +386,9 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
       }
     }
     if (!$scope.StudentData) {
-      setTimeout(()=>{
+      setTimeout(() => {
         alert("Couldn't find student");
-      },200)
+      }, 200);
     }
   };
 
@@ -370,12 +401,11 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
       return;
     }
 
-    for(const subject of $scope.subjectList){
-      if(subject.edpcode === ""+$scope.EDPCODE){
-
+    for (const subject of $scope.subjectList) {
+      if (subject.edpcode === "" + $scope.EDPCODE) {
         $scope.SubjectData = subject;
-        for(let enrolledSubjects of $scope.studentEnrolledSubjects){
-          if(enrolledSubjects.edpcode === subject.edpcode){
+        for (let enrolledSubjects of $scope.studentEnrolledSubjects) {
+          if (enrolledSubjects.edpcode === subject.edpcode) {
             $scope.Enrolled = true;
             break;
           }
@@ -384,14 +414,14 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     }
 
     $scope.LoadEnrolledStudents();
-    if(!$scope.SubjectData){
-      alert("Coudn't find Course")
+    if (!$scope.SubjectData) {
+      alert("Coudn't find Course");
     }
-  }
+  };
 
   $scope.Enroll = () => {
-    if(!$scope.SubjectData) return;
-    if(!$scope.StudentData) return;
+    if (!$scope.SubjectData) return;
+    if (!$scope.StudentData) return;
 
     $http({
       method: "post",
@@ -399,8 +429,8 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
       data: {
         idno: $scope.StudentData.idno,
         edpcode: $scope.SubjectData.edpcode,
-        enrolled_by: GetLoggedInUser() ?? 0
-      }
+        enrolled_by: GetLoggedInUser() ?? 0,
+      },
     }).then((r) => {
       $scope.RetrieveSubjects();
       $scope.getStudentsList();
@@ -408,27 +438,27 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
       $scope.SubjectData = undefined;
       setTimeout(() => {
         alert(r.data.Message);
-      }, 500)
-    })
-  }
+      }, 500);
+    });
+  };
 
   $scope.SaveEnrollment = () => {
     let rowsAffected = 0;
-    for(let enrolledSubject of $scope.studentEnrolledSubjects){
-      if(enrolledSubject.toDelete){
+    for (let enrolledSubject of $scope.studentEnrolledSubjects) {
+      if (enrolledSubject.toDelete) {
         $http({
           method: "delete",
-          url: `enrollment/${$scope.StudentData.idno}/${enrolledSubject.edpcode}`
-        })
+          url: `enrollment/${$scope.StudentData.idno}/${enrolledSubject.edpcode}`,
+        });
         rowsAffected++;
       }
     }
 
-    if(rowsAffected > 0){
-      alert(`Data Saved! ${rowsAffected} row(s) affected.`)
+    if (rowsAffected > 0) {
+      alert(`Data Saved! ${rowsAffected} row(s) affected.`);
       $scope.LoadEnrolledSubjects();
     }
-  }
+  };
 
   // Clear Enrollment User
   $scope.ClearEnrollment = () => {
@@ -439,39 +469,64 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     $scope.SubjectData = undefined;
     $scope.EDPCODE = undefined;
     $scope.Enrolled = false;
-  }
+  };
 
   // DeleteEnrolledStudents
   $scope.DeleteEnrolledStudents = () => {
-    $scope.TempToDeleteStudent = []
-    $scope.TempToDeleteStudent = $scope.EnrolledStudents.filter((e) => e.toDelete);
-    $scope.EnrolledStudents = $scope.EnrolledStudents.filter((e) => !e.toDelete);
-  }
+    $scope.TempToDeleteStudent = [];
+    $scope.TempToDeleteStudent = $scope.EnrolledStudents.filter(
+      (e) => e.toDelete
+    );
+    $scope.EnrolledStudents = $scope.EnrolledStudents.filter(
+      (e) => !e.toDelete
+    );
+  };
 
   // SaveReport
   $scope.SaveReport = () => {
     let rowsAffected = 0;
-    for(let enrolledStudent of $scope.TempToDeleteStudent){
-      if(enrolledStudent.toDelete){
+    for (let enrolledStudent of $scope.TempToDeleteStudent) {
+      if (enrolledStudent.toDelete) {
         $http({
           method: "delete",
-          url: `enrollment/${enrolledStudent.idno}/${$scope.SubjectData.edpcode}`
-        })
+          url: `enrollment/${enrolledStudent.idno}/${$scope.SubjectData.edpcode}`,
+        });
         rowsAffected++;
       }
     }
 
-    if(rowsAffected > 0){
-      alert(`Data Saved! ${rowsAffected} row(s) affected.`)
+    if (rowsAffected > 0) {
+      alert(`Data Saved! ${rowsAffected} row(s) affected.`);
       $scope.LoadEnrolledStudents();
     }
-  }
+  };
 
   $scope.RetrieveSubjects();
   $scope.getStudentsList();
+
+  $scope.numberOfPagesSub = function () {
+    return Math.ceil($scope.subjectList.length / $scope.pageSize);
+  };
+
+  $scope.numberOfPagesEnrollment = function () {
+    return Math.ceil($scope.studentEnrolledSubjects.length / $scope.pageSize);
+  };
+
+  $scope.numberOfPagesReport = function () {
+    return Math.ceil($scope.EnrolledStudents.length / $scope.pageSize);
+  };
+
+  $scope.nextPage = function () {
+    $scope.currentPage++;
+  };
 });
 ///
 app.controller("mainctrl", function ($scope, $http, $location, $rootScope) {
+  $scope.pagesizes = [5, 10, 15, 20];
+  $scope.pageSize = 5;
+  $scope.currentPage = 0;
+  $scope.search = "";
+
   $scope.logout = function () {
     // logout the user
     $rootScope.loggedIn = false;
@@ -568,6 +623,22 @@ app.controller("mainctrl", function ($scope, $http, $location, $rootScope) {
     };
   };
   $scope.getStudentsList();
+
+  $scope.numberOfPages = function () {
+    return Math.ceil($rootScope.studentList.length / $scope.pageSize);
+  };
+
+  $scope.nextPage = function () {
+    $scope.currentPage++;
+  };
+});
+
+//
+app.filter("startFrom", function () {
+  return function (input, start) {
+    start = +start;
+    return input.slice(start);
+  };
 });
 
 //
