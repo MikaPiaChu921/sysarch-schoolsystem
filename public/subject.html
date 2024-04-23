@@ -44,7 +44,7 @@
       <div class="w3-third w3-card-2 w3-round-xlarge w3-padding">
         <form style="padding: 10px; width: 100%">
           <div>
-            <label>EDP NO.</label><br />
+            <label>EDP CODE</label><br />
             <input
               type="number"
               id="newSubject.edpcode"
@@ -161,7 +161,12 @@
               type="text"
               id="search"
               ng-model="search"
-              style="border-radius: 10px; padding: 3px; font-size: 12px"
+              style="
+                border-radius: 10px;
+                padding: 3px;
+                font-size: 12px;
+                margin-right: 10px;
+              "
               class="w3-padding w3-right"
             />
           </div>
@@ -170,7 +175,7 @@
         <div>
           <table class="w3-table-all">
             <tr>
-              <th>EDP NO.</th>
+              <th>EDP CODE</th>
               <th>SUBJECT CODE</th>
               <th>TIME & DAY</th>
               <th>ROOM</th>
@@ -242,7 +247,7 @@
         <br />
         <div class="w3-row">
           <div class="w3-rest w3-container">
-            <div class="w3-left">
+            <div class="w3-center">
               <button
                 ng-disabled="currentPage==0"
                 ng-click="currentPage=currentPage-1"
