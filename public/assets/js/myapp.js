@@ -508,13 +508,13 @@ app.controller("subjectctrl", function ($scope, $http, $location, $rootScope) {
     return Math.ceil($scope.subjectList.length / $scope.pageSize);
   };
 
-  $scope.numberOfPagesEnrollment = function () {
-    return Math.ceil($scope.studentEnrolledSubjects.length / $scope.pageSize);
-  };
+  // $scope.numberOfPagesEnrollment = function () {
+  //   return Math.ceil($scope.studentEnrolledSubjects.length / $scope.pageSize);
+  // };
 
-  $scope.numberOfPagesReport = function () {
-    return Math.ceil($scope.EnrolledStudents.length / $scope.pageSize);
-  };
+  // $scope.numberOfPagesReport = function () {
+  //   return Math.ceil($scope.EnrolledStudents.length / $scope.pageSize);
+  // };
 
   $scope.nextPage = function () {
     $scope.currentPage++;

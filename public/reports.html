@@ -44,7 +44,7 @@
       <div class="w3-card-2 w3-round-xlarge w3-padding">
         <form style="padding: 10px; width: 100%">
           <div>
-            <label>edp code</label>
+            <label>EDP CODE</label>
             <input
               type="number"
               id="edpcode"
@@ -93,8 +93,8 @@
                 title="Enrolled by: {{ student.enrolled_by }}"
               >
                 <td>{{ student.idno }}</td>
-                <td>{{ student.lastname }}</td>
-                <td>{{ student.firstname }}</td>
+                <td>{{ student.lastname | uppercase}}</td>
+                <td>{{ student.firstname | uppercase}}</td>
                 <td>{{ student.course }}</td>
                 <td>{{ student.level }}</td>
                 <td>

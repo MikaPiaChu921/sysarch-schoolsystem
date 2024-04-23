@@ -161,7 +161,12 @@
               type="text"
               id="search"
               ng-model="search"
-              style="border-radius: 10px; padding: 3px; font-size: 12px"
+              style="
+                margin-right: 10px;
+                border-radius: 10px;
+                padding: 3px;
+                font-size: 12px;
+              "
               class="w3-padding w3-right"
             />
           </div>
@@ -251,7 +256,7 @@
                 ng-disabled="currentPage==0"
                 ng-click="currentPage=currentPage-1"
               >
-                prev
+                Prev
               </button>
               {{ currentPage+1 }} / {{numberOfPages() }}
               <button
