@@ -4,6 +4,9 @@ const path = require("path");
 const app = express();
 const mysql = require("mysql");
 const bodyparser = require("body-parser");
+const fileupload = require("express-fileupload");
+require("dotenv").config();
+const port = process.env.PORT || 4321;
 
 const config = {
   host: "127.0.0.1",
@@ -24,6 +27,16 @@ app.use(express.json());
 app.use(CookieParser());
 app.use(bodyparser.urlencoded({ extended: true, limit: "15mb" }));
 app.use(bodyparser.json());
+
+//camera
+app.use(fileupload());
+
+app.post("/upload", (req, res) => {
+  let file = req.files.webcam;
+  let filename = req.query.name;
+  file.mv(path.join(__dirname, "public/assets/img/" + filename));
+  res.send("imaged saved!");
+});
 
 app.get("/", (req, res) => {
   res.render("index.html");
@@ -49,7 +62,7 @@ app.post("/userlogin", (req, res) => {
 
 // retrieve user by Id
 app.get("/user/:id", (req, res) => {
-  const query = "SELECT email from `user` WHERE id = "+`'${req.params.id}'`;
+  const query = "SELECT email from `user` WHERE id = " + `'${req.params.id}'`;
   databaseConnection.query(query, (err, result, field) => {
     if (err) res.status(500).json(err);
     res.json(result);
@@ -140,22 +153,22 @@ app.put("/subject", (req, res) => {
 
 // get enrolled
 app.get("/enrollment", (req, res) => {
-  const query = "SELECT * from `enrollment`"
+  const query = "SELECT * from `enrollment`";
   databaseConnection.query(query, (err, results, fields) => {
-    if(err) res.status(500).json(err);
-    res.json(results ?? [])
-  })
-})
+    if (err) res.status(500).json(err);
+    res.json(results ?? []);
+  });
+});
 
 // enroll
 app.post("/enrollment", (req, res) => {
   const data = req.body;
   const query = `INSERT INTO \`enrollment\` (\`idno\`, \`edpcode\`, \`enrolled_by\`) VALUES ('${data.idno}', '${data.edpcode}', '${data.enrolled_by}')`;
   databaseConnection.query(query, (err, result, field) => {
-    if(err) res.status(500).json(err);
-    res.json({Message: "Student Enrolled"})
+    if (err) res.status(500).json(err);
+    res.json({ Message: "Student Enrolled" });
   });
-})
+});
 
 // delete
 app.delete("/enrollment/:idno/:edpcode", (req, res) => {
@@ -163,11 +176,10 @@ app.delete("/enrollment/:idno/:edpcode", (req, res) => {
   const edpcode = req.params.edpcode;
   const query = `DELETE FROM \`enrollment\` WHERE \`idno\`='${idno}' AND \`edpcode\`='${edpcode}'`;
   databaseConnection.query(query, (err, result, field) => {
-    if(err) res.status(500).json(err);
-    res.json({Message: "Student unenrolled"});
+    if (err) res.status(500).json(err);
+    res.json({ Message: "Student unenrolled" });
   });
-})
-
+});
 
 app.listen("4321", () => {
   console.log("listening at port 4321");

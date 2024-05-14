@@ -6,20 +6,24 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="stylesheet" href="assets/css/w3.css" />
     <script
-      src="https://kit.fontawes	ome.com/08e4802095.js"
+      src="https://kit.fontawesome.com/08e4802095.js"
       crossorigin="anonymous"
     ></script>
     <script src="assets/js/angular.min.js"></script>
     <script src="assets/js/angular-route.min.js"></script>
     <script src="assets/js/w3-helper.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <style>
+      .mycamera,
+      .mypicture {
+        width: 320px;
+        height: 240px;
+        border: 1px solid #c0c0c0;
+      }
+    </style>
+    <script src="assets/js/webcam.min.js"></script>
   </head>
-  <body
-    ng-app="myapp"
-    style="
-      font-family: 'Poppins', sans-serif;
-      background-image: url(assets/img/css.png);
-    "
-  >
+  <body ng-app="myapp">
     <header>
       <div class="w3-blue">
         <h2 class="w3-padding">School System v1.0</h2>
@@ -29,5 +33,6 @@
       <!-- contents will be inside here -->
     </div>
     <script src="/assets/js/myapp.js"></script>
+    <script src="/assets/js/myscript.js"></script>
   </body>
 </html>
